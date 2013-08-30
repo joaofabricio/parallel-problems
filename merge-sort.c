@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "utils.c"
@@ -16,17 +15,13 @@ int* merge(int* arr1, int l1, int* arr2, int l2) {
 			i2++;
 		}
 	}
-	printf("merge result: ");
-	print_array(ret, l1+l2);
 	return ret;
 }
 
 int* merge_sort(int* arr, int b, int e) {
-	printf("b=%d, e=%d\n", b, e);
 	if (b >= e-1) {
 		int* v = malloc(sizeof(int));
 		v[0] = arr[b];
-		printf("retornando v={%d}\n", arr[b]);
 		return v;
 	} else {
 
