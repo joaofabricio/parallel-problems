@@ -12,13 +12,13 @@ void sor_test() {
 			m[i][j] =1;
 	}
 
-	int expected[3][3];// = {{1,1,1}, {1,4,1},{1,1,1}};
+	int expected[3][3];// = {{1,1,1}, {1,2,1},{1,1,1}};
 	for(i=0; i<3; i++) 
                 for (j=0;j<3;j++)
                         expected[i][j] =1;
-	expected[1][1] = 4;
+	expected[1][1] = 2;
 
-	int** ret = sor(m, 3, 3);
+	int** ret = sor(m, 3, 3, 2);
 
 	for(i=0; i<3; i++) {
 		for (j=0; j<3; j++) {

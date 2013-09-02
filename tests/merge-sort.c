@@ -5,24 +5,24 @@
 
 void merge_sort_test() {
         int arr[] = { 3, 1, 5, 2, 10, 8, 8, 15};
-        int ret = *(int*) merge_sort(arr, 0, 8);
+        int* ret = merge_sort(arr, 0, 8);
 
 	int i;
         for (i=0; i<7; i++) {
-                assert((&ret)[i] <= (&ret)[i+1]);
+                assert(ret[i] <= ret[i+1]);
 	}
 }
 
 void merge_test() {
 	
-	int arr1[] = {51, 10, 5, 40};
-	int arr2[] = {3, 8, 5, 1};
+	int arr1[] = {5, 10, 40, 51};
+	int arr2[] = {1, 3, 5, 8};
 
-	int arr =  *(int*) merge(arr1, 4, arr2, 4);
+	int* arr =  merge(arr1, 4, arr2, 4);
 
 	int i;
         for (i=0; i<7; i++) {
-                assert((&arr)[i] <= (&arr)[i+1]);
+                assert(arr[i] <= arr[i+1]);
 	}
 }
 

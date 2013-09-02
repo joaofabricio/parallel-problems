@@ -1,6 +1,7 @@
 #include <stdlib.h>
+#include <stdio.h>
 
-int** sor(int** m, int l, int c) {
+int** sor(int** m, int l, int c, double fator) {
 
 	int** ret = malloc(l * sizeof(int));
 
@@ -20,10 +21,9 @@ int** sor(int** m, int l, int c) {
 			int leste = m[i][j+1];
 			int oeste = m[i][j-1];
 
-			ret[i][j] = norte+sul+leste+oeste;
+			ret[i][j] = (norte+sul+leste+oeste)/4*fator;
 		}
 	}
 
 	return ret;
-
 }
