@@ -16,12 +16,12 @@ int** sor(int** m, int l, int c, double fator) {
 
 	for (i=1; i<l-1; i++) {
 		for (j=1; j<c-1; j++) {
-			int norte = m[i-1][j];
-			int sul = m[i+1][j];
-			int leste = m[i][j+1];
-			int oeste = m[i][j-1];
+			int up = m[i-1][j];
+			int down = m[i+1][j];
+			int left = m[i][j-1];
+			int right = m[i][j+1];
 
-			ret[i][j] = (norte+sul+leste+oeste)/4*fator;
+			ret[i][j] = (up+down+left+right)/4*fator;
 		}
 	}
 
