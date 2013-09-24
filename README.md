@@ -9,7 +9,7 @@ Problemas para resolver com paralelismo:
 
 4) Busca pelo menor caminho em um grafo - Probe/Echo;
 
-5) Ordenação de eventos - Broadcast;
+5) Ordenação de eventos - Broadcast; ok
 
 6) Exclusão mútua distribuída - passagem de token.
 

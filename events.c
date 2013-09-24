@@ -1,30 +1,59 @@
 #include <pthread.h>
+#include <time.h>
 
-#define WORK_SIZE 100
-int work_vector[WORK_SIZE];
+#include "utils.c"
+
+#define WORK_SIZE 200
+
+typedef struct work_t {
+	int** value;
+	clock_t time;
+	void *next;
+} work_t;
+
+work_t *w;
 
 pthread_mutex_t lock;
 
 int manager_seq = 0;
 
-int request_number() {
-	pthread_mutex_lock(&lock);
-	int num = manager_seq++;
-	pthread_mutex_unlock(&lock);
-	return num;
-}
-
 void work(void* arg) {
-	int pass;
-	pass = request_number();
-	while (pass < WORK_SIZE) {
-		work_vector[pass] = WORK_SIZE;
-		pass = request_number();
+	int** mm(int** m1, int** m2, int m, int n) {
+
+		int i;
+
+		int** res = matrix_instance(m, n, 0);
+
+		for (i=0; i<m; i++) {
+			int j;
+			for (j=0; j<n; j++) {
+				int k;
+				for (k=0; k<m; k++) {
+					res[i][j] += m1[i][k]*m2[k][j];
+				}
+			}
+		}
+		return res;
+
 	}
+
+	work_t temp;
+	temp.value = mm(matrix_instance(WORK_SIZE, WORK_SIZE, 0), 
+			matrix_instance(WORK_SIZE, WORK_SIZE, 0),
+			WORK_SIZE,
+			WORK_SIZE);
+	temp.time = clock();
+
+	pthread_mutex_lock(&lock);
+	temp.next = (void*) w;
+	w = &temp;
+	pthread_mutex_unlock(&lock);
+
 	pthread_exit(NULL);
 }
 
 void start_threads(int nthreads) {
+	w = NULL;
 	int i;
 	pthread_t threads[nthreads];
 	//threads = malloc(nthreads * sizeof(pthread_t));

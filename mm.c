@@ -16,6 +16,6 @@ int** mm(int** m1, int** m2, int m, int n) {
 		}
 	}
 	return res;
-	
+
 }
 
