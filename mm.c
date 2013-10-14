@@ -18,14 +18,13 @@ pthread_cond_t cond_4;
 
 work_4 *list_work_4 = NULL;
 
-void add_work_4(work_4 w) {
-	w.next = NULL;
+void add_work_4(work_4 *w) {
+	w->next = NULL;
         pthread_mutex_lock(&lock_4);
 	if (list_work_4 == NULL)
-		list_work_4 = &w;
+		list_work_4 = w;
 	else
-		list_work_4->next = (void*) &w;
-        list_work_4->next = (void*) &w;
+		list_work_4->next = (void*) w;
 	pthread_cond_signal(&cond_4);
         pthread_mutex_unlock(&lock_4);
 }
@@ -65,14 +64,13 @@ pthread_cond_t cond_3;
 
 work_3 *list_work_3 = NULL;
 
-void add_work_3(work_3 w) {
-	w.next = NULL;
+void add_work_3(work_3 *w) {
+	w->next = NULL;
 	pthread_mutex_lock(&lock_3);
 	if (list_work_3 == NULL)
-		list_work_3 = &w;
+		list_work_3 = w;
 	else
-		list_work_3->next = (void*) &w;
-	list_work_3->next = (void*) &w;
+		list_work_3->next = (void*) w;
 	pthread_cond_signal(&cond_3);
 	pthread_mutex_unlock(&lock_3);
 }
@@ -82,8 +80,13 @@ work_3 remove_work_3() {
 	if (list_work_3 == NULL)
 		pthread_cond_wait(&cond_3, &lock_3);
 	work_3 *w = list_work_3;
-	if (w->end == 1)
+	if (w->end == 1) {
+		work_4 *w4 = malloc(sizeof(work_4));
+		w4->end = 1;
+		add_work_4(w4);
+		printf("finalizando thread 3\n");
 		pthread_exit(NULL);
+	}
 	list_work_3 = (work_3*)list_work_3->next;
 	pthread_mutex_unlock(&lock_3);
 	return *w;
@@ -99,13 +102,12 @@ void p3(void* arg) {
 			ac += w.p[i];
 		}
 		printf("soma: %d \n", ac);
-		work_4 w4;
-		w4.ac = ac;
-		w4.pr = w.pr;
-		w4.pc = w.pc;
+		work_4 *w4 = malloc(sizeof(work_4));
+		w4->ac = ac;
+		w4->pr = w.pr;
+		w4->pc = w.pc;
 		add_work_4(w4);
 	}
-	pthread_exit(NULL);
 }
 
 /***********************************
@@ -124,13 +126,13 @@ pthread_cond_t cond_2;
 
 work_2 *list_work_2 = NULL;
 
-void add_work_2(work_2 w) {
-	w.next = NULL;
+void add_work_2(work_2 *w) {
+	w->next = NULL;
 	pthread_mutex_lock(&lock_2);
 	if (list_work_2 == NULL)
-		list_work_2 = &w;
+		list_work_2 = w;
 	else
-		list_work_2->next = (void*) &w;
+		list_work_2->next = (void*) w;
 	pthread_cond_signal(&cond_2);
 	pthread_mutex_unlock(&lock_2);
 }
@@ -142,6 +144,9 @@ work_2 remove_work_2() {
 	work_2 *w = list_work_2;
 	if (w->end == 1) {
 		printf("terminando thread 2\n");
+		work_3 *w3 = malloc(sizeof(work_3));
+		w3->end = 1;
+		add_work_3(w3);
 		pthread_exit(NULL);
 	}
 	list_work_2 = (work_2*) list_work_2->next;
@@ -159,11 +164,11 @@ void p2(void* arg) {
 			p[i] = w.r[i] * w.c[i];
 		}
 
-		work_3 w3;
-		w3.p = p;
-		w3.pr = w.pr;
-		w3.pc = w.pc;
-		w3.n = w.n;
+		work_3 *w3 = malloc(sizeof(work_3));
+		w3->p = p;
+		w3->pr = w.pr;
+		w3->pc = w.pc;
+		w3->n = w.n;
 
 		add_work_3(w3);
 	}
@@ -197,17 +202,20 @@ void p1(void* arg) {
 				c[j] = w1.m2[k][j];
 			}
 
-			work_2 w;
-			w.r = r;
-			w.c = c;
-			w.n = n;
-			w.pr = i;
-			w.pc = k;
+			work_2 *w = malloc(sizeof(work_2));
+			w->r = r;
+			w->c = c;
+			w->n = n;
+			w->pr = i;
+			w->pc = k;
 
 			printf("inserindo linha %d, coluna %d \n", i, k);
 			add_work_2(w);
 		}
 	}
+	work_2 *w2 = malloc(sizeof(work_2));
+	w2->end = 1;
+	add_work_2(w2);
 }
 
 
