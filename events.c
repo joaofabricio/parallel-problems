@@ -31,8 +31,10 @@ int get_value() {
 	return 1111;
 }
 
+int w = 0;
+
 int has_work() {
-	return 1;
+	return w++ < 999;
 }
 
 void send(work_t w) {
@@ -49,7 +51,10 @@ void send(work_t w) {
 		message[i].new = 1;
 	}
 	pthread_mutex_unlock(&lock);
+	#ifdef DEBUG
 	printf("send %d\n", w.timestamp);
+	fflush(stdout);
+	#endif
 	pthread_cond_broadcast(&cond);
 }
 
