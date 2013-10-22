@@ -13,11 +13,11 @@ void events_test() {
 		//assert(work_vector[i] == WORK_SIZE);
 	}
 	
-	work_t *temp = w;
+	/*work_t *temp = w;
 	while (temp != NULL) {
 		printf("time: %f\n", (float) temp->time);
 		temp = temp->next;
-	}
+	}*/
 }
 
 int main() {
