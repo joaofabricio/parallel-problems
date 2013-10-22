@@ -18,6 +18,9 @@ void mm_exec(int m, int n, int p) {
 	int i,j;
         for (i=0; i<m; i++) {
                 for (j=0; j<n; j++) {
+			#ifdef DEBUG
+			printf("r[%d][%d] = %d \n", i, j, r[i][j]);
+			#endif
                         assert(r[i][j] == n);
                 }
         }
@@ -25,8 +28,6 @@ void mm_exec(int m, int n, int p) {
 }
 
 int main() {
-	mm_exec(1000, 1000, 1000);
+	mm_exec(100, 100, 100);
 	return 0;
 }
-
-
