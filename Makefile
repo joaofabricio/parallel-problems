@@ -19,7 +19,7 @@ dijkstra:
 
 events:
 	@echo compilando $(EVENTS)
-	@$(COMPILER) -o $(EVENTS) -O3 $(TEST)$(EVENTS).c -Wall -lpthread -D DEBUG
+	@$(COMPILER) -o $(EVENTS) -O3 $(TEST)$(EVENTS).c -Wall -lpthread 
 	@echo executando $(EVENTS)
 	./$(EVENTS)
 	@echo ..............ok
@@ -35,7 +35,7 @@ merge-sort:
 
 mm:
 	@echo compilando $(MM)
-	@$(COMPILER) -o $(MM) $(TEST)$(MM).c -lpthread -g -Wall -D DEBUG
+	@$(COMPILER) -o $(MM) $(TEST)$(MM).c -lpthread -g -Wall -O3
 	@echo executando $(MM)
 	./$(MM)
 	@echo ..............ok
@@ -43,7 +43,7 @@ mm:
 
 mutex:
 	@echo compilando $(MUTEX)
-	@$(COMPILER) -o $(MUTEX) -O3 $(TEST)$(MUTEX).c -Wall
+	@$(COMPILER) -o $(MUTEX) -O3 $(TEST)$(MUTEX).c -lpthread -D DEBUG
 	@echo executando $(MUTEX)
 	./$(MUTEX)
 	@echo ..............ok
