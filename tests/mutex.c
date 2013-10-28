@@ -1,3 +1,5 @@
-void mutex_test() {
-	//TODO
+#include "../mutex.c"
+
+int main() {
+	mutex(4);
 }
