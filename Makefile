@@ -6,12 +6,13 @@ MERGE_SORT=merge-sort
 MM=mm
 MUTEX=mutex
 SOR=sor
+DEBUG=-D DEBUG
 
 .PHONY: dijkstra events merge-sort mm mutex sor all
 
 dijkstra:
 	@echo compilando $(DIJKSTRA)
-	@$(COMPILER) -o $(DIJKSTRA) -O3 $(TEST)$(DIJKSTRA).c -Wall
+	@$(COMPILER) -o $(DIJKSTRA) -O3 $(TEST)$(DIJKSTRA).c -Wall $(DEBUG)
 	@echo executando $(DIJKSTRA)
 	./$(DIJKSTRA)
 	@echo ..............ok
@@ -19,7 +20,7 @@ dijkstra:
 
 events:
 	@echo compilando $(EVENTS)
-	@$(COMPILER) -o $(EVENTS) -O3 $(TEST)$(EVENTS).c -Wall -lpthread 
+	@$(COMPILER) -o $(EVENTS) -O3 $(TEST)$(EVENTS).c -Wall -lpthread $(DEBUG)
 	@echo executando $(EVENTS)
 	./$(EVENTS)
 	@echo ..............ok
@@ -27,7 +28,7 @@ events:
 
 merge-sort:
 	@echo compilando $(MERGE_SORT)
-	@$(COMPILER) -o $(MERGE_SORT) -O3 $(TEST)$(MERGE_SORT).c -Wall
+	@$(COMPILER) -o $(MERGE_SORT) -O3 $(TEST)$(MERGE_SORT).c $(DEBUG) -Wall -lpthread
 	@echo executando $(MERGE_SORT)
 	./$(MERGE_SORT)
 	@echo ..............ok
@@ -35,7 +36,7 @@ merge-sort:
 
 mm:
 	@echo compilando $(MM)
-	@$(COMPILER) -o $(MM) $(TEST)$(MM).c -lpthread -g -Wall -O3
+	@$(COMPILER) -o $(MM) $(TEST)$(MM).c -lpthread -g -Wall -O3 $(DEBUG)
 	@echo executando $(MM)
 	./$(MM)
 	@echo ..............ok
@@ -43,7 +44,7 @@ mm:
 
 mutex:
 	@echo compilando $(MUTEX)
-	@$(COMPILER) -o $(MUTEX) -O3 $(TEST)$(MUTEX).c -lpthread -D DEBUG
+	@$(COMPILER) -o $(MUTEX) -O3 $(TEST)$(MUTEX).c -lpthread -Wall $(DEBUG)
 	@echo executando $(MUTEX)
 	./$(MUTEX)
 	@echo ..............ok
@@ -51,7 +52,7 @@ mutex:
 
 sor:
 	@echo compilando $(SOR)
-	@$(COMPILER) -o $(SOR) -O3 $(TEST)$(SOR).c -Wall
+	@$(COMPILER) -o $(SOR) -O3 $(TEST)$(SOR).c -Wall $(DEBUG)
 	@echo executando $(SOR)
 	./$(SOR)
 	@echo ..............ok
@@ -62,5 +63,5 @@ all:
 	make $(EVENTS)
 	make $(MERGE_SORT)
 	make $(MM)
-	#make $(MUTEX)
-	make $(SOR)
+	make $(MUTEX)
+	#make $(SOR)
