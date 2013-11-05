@@ -1,7 +1,7 @@
 Problemas para resolver com paralelismo:
 
 
-1) Merge sort - Gerente e trabalhadores; - seq ok
+1) Merge sort - Gerente e trabalhadores; - ok
 
 2) SOR - Heart beat; - seq ok
 
