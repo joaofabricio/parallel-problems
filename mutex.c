@@ -1,13 +1,18 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include <pthread.h>
 
 pthread_cond_t *cond_token;
 pthread_mutex_t lock_token;
+pthread_mutex_t lock_exec;
 pthread_mutex_t *lock_work;
 pthread_cond_t *cond_work;
 int *interest;
 int token;
 int nthreads;
+
+int control = 0;
 
 void receive_token(int id) {
 	if (token == id) {
@@ -22,8 +27,10 @@ void receive_token(int id) {
 void manager(void* ident) {
 	int *p_id = (int *) ident;
 	int id = *p_id;
+	pthread_mutex_unlock(&lock_exec);
 
-	while (1) {
+	while (control < 10) {
+	//while (1) {
 		receive_token(id);
 
 		if (interest[id]) {
@@ -42,8 +49,10 @@ void manager(void* ident) {
 void executor(void* ident) {
 	int *p_id = (int *) ident;
 	int id = *p_id;
+	pthread_mutex_unlock(&lock_exec);
 
-	while (1) {
+	while (control++ < 10) {
+	//while (1) {
 		interest[id] = 1;
 
 		pthread_mutex_lock(&lock_work[id]);
@@ -55,12 +64,13 @@ void executor(void* ident) {
 		printf("executando %d \n", id);
 		fflush(stdout);
 		#endif
-		sleep(1);
+		usleep(100);
 
 		interest[id] = 0;
 		pthread_cond_signal(&cond_work[id]);
 
 		//non-critical region
+		usleep(100);
 	}
 }
 
@@ -80,7 +90,9 @@ void mutex(int n_threads) {
 	int i;
 
 	for (i=0; i<nthreads; i++) {
+		pthread_mutex_lock(&lock_exec);
 		pthread_create(&threads[i], NULL, (void *) &executor, (void *) &i);
+		pthread_mutex_lock(&lock_exec);
 		pthread_create(&helpers[i], NULL, (void *) &manager, (void *) &i);
 	}
 
