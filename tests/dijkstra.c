@@ -37,6 +37,8 @@ void dijkstra_test() {
 	(b->edges[0]).vertex = a;
 	(b->edges[1]).weight = 1;
 	(b->edges[1]).vertex = c;
+	(b->edges[2]).weight = 2;
+	(b->edges[2]).vertex = d;
 
 	(c->edges[0]).weight = 1;
 	(c->edges[0]).vertex = b;
@@ -66,12 +68,15 @@ void dijkstra_test() {
 
 	vertex_t *ways = dijkstra(a, 6);
 
+	#ifdef DEBUG
 	int i;
 	for (i=0; i<6; i++) {
 		printf("caminho para %d: %d\n", i, ways[i].label);
 	}
+	#endif
 }
 
 int main() {
 	dijkstra_test();
+	return 0;
 }

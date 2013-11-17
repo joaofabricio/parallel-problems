@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define INFINITE 9999999
+
 typedef struct edge_t {
 	int weight;
 	void* vertex;
@@ -11,7 +13,6 @@ typedef struct vertex_t {
 	int n_edges;
 	int label;
 	edge_t* edges;
-	void *next;
 } vertex_t;
 
 typedef struct work_t {
@@ -29,13 +30,20 @@ void process_vertex(void* w) {
 	work_t *work = (work_t*) w;
 	vertex_t *v = work->vertex;
 
+	#ifdef DEBUG
+	if (work->source != NULL) {
+		printf("source: %d, atual: %d, peso: %d, min: %d \n", work->source->label, v->label, work->weight, distances[v->label]);
+		fflush(stdout);
+	}
+	#endif
+
 	if (work->weight >= distances[v->label]) {
 		pthread_exit(NULL);
 	}
 
 	pthread_mutex_lock(&locks[v->label]);
 	distances[v->label] = work->weight;
-	ways[v->label] = *(work->source);
+	ways[v->label] = work->source!=NULL? *(work->source): ways[v->label];
 	pthread_mutex_unlock(&locks[v->label]);
 
 
@@ -48,9 +56,9 @@ void process_vertex(void* w) {
 			work_t *next = malloc(sizeof(work_t));
 			next->weight = work->weight + edge.weight;
 			next->vertex = edge.vertex;
-			next->source = work->source;
+			next->source = work->vertex;
 
-			pthread_create(sons[i], NULL, (void*) process_vertex, (void*) next);
+			pthread_create(&sons[i], NULL, (void*) process_vertex, (void*) next);
 		}
 
 	}
@@ -61,6 +69,10 @@ void process_vertex(void* w) {
 vertex_t* dijkstra(vertex_t *source, int n_vertices) {
 
 	distances = malloc(n_vertices * sizeof(int));
+	int i;
+	for (i=0; i<n_vertices; i++)
+		distances[i] = INFINITE;
+
 	ways = malloc(n_vertices * sizeof(vertex_t));
 	locks = malloc(n_vertices * sizeof(pthread_mutex_t));
 
