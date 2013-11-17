@@ -34,6 +34,10 @@ void worker(void *w) {
 	begin_col = work->columns/NTHREADS * id;
 	end_col = work->columns/NTHREADS * (id+1);
 
+	#ifdef DEBUG
+	printf("Thread %d: begin_lin: %d, end_lin: %d, begin_col: %d, end_col: %d\n", id, begin_lin, end_lin, begin_col, end_col);
+	#endif
+
 	int i, j;
 	for (i=begin_lin+1; i<end_lin-1; i++) {
 		for (j=begin_col+1; j<end_col-1; j++) {
