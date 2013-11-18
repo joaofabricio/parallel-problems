@@ -2,7 +2,7 @@
 
 void dijkstra_test() {
 
-		vertex_t *a = malloc(sizeof(vertex_t));
+	vertex_t *a = malloc(sizeof(vertex_t));
 	vertex_t *b = malloc(sizeof(vertex_t));
 	vertex_t *c = malloc(sizeof(vertex_t));
 	vertex_t *d = malloc(sizeof(vertex_t));

@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "utils.c"
+
 #define INFINITE 9999999
 
 typedef struct edge_t {
@@ -37,11 +39,15 @@ void process_vertex(void* w) {
 	}
 	#endif
 
+	pthread_mutex_lock(&locks[v->label]);
 	if (work->weight >= distances[v->label]) {
+		#ifdef DEBUG
+		printf("-----dead source: %d, atual: %d, peso: %d \n", work->source->label, v->label, work->weight);
+		#endif
+		pthread_mutex_unlock(&locks[v->label]);
 		pthread_exit(NULL);
 	}
 
-	pthread_mutex_lock(&locks[v->label]);
 	distances[v->label] = work->weight;
 	ways[v->label] = work->source!=NULL? *(work->source): ways[v->label];
 	pthread_mutex_unlock(&locks[v->label]);
@@ -62,8 +68,18 @@ void process_vertex(void* w) {
 		}
 
 	}
-	for (i=0; i<v->n_edges; i++)
-		pthread_join(sons[i], NULL);
+	for (i=0; i<v->n_edges; i++) {
+		if (work->source != v->edges[i].vertex) {
+			#ifdef DEBUG
+			printf(">>>>join atual: %d, dest: %d<<<<<<<<<\n", v->label, ((vertex_t*)v->edges[i].vertex)->label);
+			#endif
+			pthread_join(sons[i], NULL);
+			#ifdef DEBUG
+			printf("***>finalizando atual: %d, dest: %d\n", v->label, ((vertex_t*)v->edges[i].vertex)->label);
+			#endif
+		}
+	}
+	pthread_exit(NULL);
 }
 
 vertex_t* dijkstra(vertex_t *source, int n_vertices) {
