@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "../dijkstra.c"
 
 void dijkstra_test() {
@@ -68,12 +69,18 @@ void dijkstra_test() {
 
 	vertex_t *ways = dijkstra(a, 6);
 
-	#ifdef DEBUG
 	int i;
 	for (i=0; i<6; i++) {
+		#ifdef DEBUG
 		printf("caminho para %d: %d\n", i, ways[i].label);
+		#endif
 	}
-	#endif
+	assert(ways[0].label == 0);
+	assert(ways[1].label == 0);
+	assert(ways[2].label == 3);
+	assert(ways[3].label == 0);
+	assert(ways[4].label == 3);
+	assert(ways[5].label == 4);
 }
 
 int main() {
